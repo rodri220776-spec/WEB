@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CorreoSeguro | Página principal</title>
+	<link rel="stylesheet" href="2.css">
+</head>
+<body>
+	<div class="app-shell">
+		<aside class="sidebar">
+			<div class="brand"><span class="brand-mark">✦</span> CorreoSeguro</div>
+			<p class="sidebar-label">Espacio de trabajo</p>
+			<nav class="side-nav" aria-label="Navegación principal">
+				<button class="active" type="button" data-view="Inicio"><span class="nav-icon">⌂</span> Inicio</button>
+				<button type="button" data-view="Bandeja de entrada" data-folder="inbox" data-plan-feature disabled title="Activa CorreoSeguro Plus para desbloquear"><span class="nav-icon">✉</span> Bandeja de entrada</button>
+				<button type="button" data-view="Enviados" data-folder="sent" data-plan-feature disabled title="Activa CorreoSeguro Plus para desbloquear"><span class="nav-icon">↗</span> Enviados</button>
+				<button type="button" data-view="Archivados" data-folder="archived" data-plan-feature disabled title="Activa CorreoSeguro Plus para desbloquear"><span class="nav-icon">▣</span> Archivados</button>
+				<button type="button" id="flowchart-button" data-view="Flujograma"><span class="nav-icon">⌁</span> Flujograma</button>
+			</nav>
+			<div class="sidebar-bottom">
+				<div class="user-mini"><span class="avatar" id="user-avatar">?</span><div><strong id="user-name">Tu cuenta</strong><small id="user-email">Sesión activa</small></div></div>
+				<button class="logout" id="logout-button" type="button">↪ &nbsp; Cerrar sesión</button>
+			</div>
+		</aside>
+
+		<main class="content">
+			<header class="topbar">
+				<div><p class="breadcrumb">Panel principal / Hoy</p><h1 id="welcome-title">Buenos días</h1></div>
+				<div class="top-actions"><button class="icon-button" id="notification-button" type="button" aria-label="Ver notificaciones">♢</button><button class="compose" id="compose-button" type="button" disabled title="Activa CorreoSeguro Plus para desbloquear">＋ Nuevo mensaje</button></div>
+			</header>
+
+			<section class="stats" id="home-stats" aria-label="Resumen de actividad">
+				<article class="stat"><span class="stat-label">Mensajes recibidos</span><strong>24</strong><small>↑ 12% esta semana</small></article>
+				<article class="stat"><span class="stat-label">Sin leer</span><strong>08</strong><small>Requieren tu atención</small></article>
+				<article class="stat"><span class="stat-label">Protección</span><strong>100%</strong><small>Cuenta verificada</small></article>
+			</section>
+
+			<section class="billing-panel panel" id="home-billing" aria-labelledby="billing-title">
+				<div class="billing-copy"><p class="eyebrow">CorreoSeguro Plus</p><h2 id="billing-title">Más espacio para tus conversaciones</h2><p>Activa tu plan y disfruta de 50 GB, filtros avanzados y soporte prioritario.</p></div>
+				<div class="billing-action"><strong>4,99 € <small>/ mes</small></strong><button class="compose" id="payment-button" type="button">Activar plan</button><span id="payment-status" role="status" aria-live="polite">Activa el plan para desbloquear las opciones de correo.</span></div>
+			</section>
+
+			<div class="dashboard-grid" id="home-dashboard">
+				<section class="panel" aria-labelledby="inbox-title">
+					<div class="panel-heading"><h2 id="inbox-title">Últimos mensajes</h2></div>
+					<div class="inbox-list"><p class="mail-empty-note">Los mensajes enviados por otras cuentas de CorreoSeguro aparecerán aquí.</p></div>
+				</section>
+
+				<section class="panel security-panel" aria-labelledby="security-title">
+					<div class="panel-heading"><h2 id="security-title">Estado de cuenta</h2></div>
+					<div class="security-copy"><div class="security-status"><span class="status-dot"></span> Todo está en orden</div><p>Tu cuenta y tus sesiones están protegidas. No detectamos actividad inusual.</p></div>
+					<div class="security-item"><span>Correo verificado</span><strong>ACTIVO</strong></div>
+					<div class="security-item"><span>Último acceso</span><strong>Ahora</strong></div>
+					<div class="security-item"><span>Sesiones abiertas</span><strong>1 DISPOSITIVO</strong></div>
+				</section>
+			</div>
+
+			<section class="mail-view" id="mail-view" hidden aria-label="Correo">
+				<div class="panel" id="mail-list-panel">
+					<div class="panel-heading"><div><h2 id="mail-view-title">Bandeja de entrada</h2><small id="mail-view-count"></small></div><button class="compose" id="mail-compose-button" type="button">＋ Nuevo mensaje</button></div>
+					<div class="message-list" id="mail-list" aria-live="polite"></div>
+					<div class="mail-empty" id="mail-empty" hidden>No hay mensajes en esta carpeta.</div>
+				</div>
+				<section class="panel mail-detail" id="mail-detail" hidden aria-labelledby="detail-subject">
+					<div class="panel-heading"><button class="text-button" id="back-to-mail-list" type="button">← Volver a la lista</button><div class="mail-detail-actions"><button class="text-button" id="mail-archive-button" type="button">Archivar</button><button class="text-button" id="mail-restore-button" type="button" hidden>Restaurar</button></div></div>
+					<div class="mail-detail-copy"><h2 id="detail-subject"></h2><p id="detail-meta"></p><div class="mail-detail-body" id="detail-body"></div></div>
+				</section>
+			</section>
+
+			<section class="flow-panel panel" id="flowchart-section" aria-labelledby="flowchart-title">
+				<div class="panel-heading"><h2 id="flowchart-title">Flujograma del sistema</h2><a href="flujograma.html" target="_blank" rel="noopener">Abrir aparte ↗</a></div>
+				<iframe src="flujograma.html" title="Flujograma del control de acceso" loading="lazy"></iframe>
+			</section>
+		</main>
+	</div>
+	<div class="toast" id="toast" role="status"></div>
+	<div class="payment-backdrop" id="payment-modal" hidden>
+		<section class="payment-modal" role="dialog" aria-modal="true" aria-labelledby="payment-title">
+			<button class="modal-close" id="close-payment-button" type="button" aria-label="Cerrar pago">×</button>
+			<p class="eyebrow">Checkout protegido</p>
+			<h2 id="payment-title">Activa CorreoSeguro Plus</h2>
+			<p class="payment-subtitle">50 GB de almacenamiento y herramientas avanzadas por 4,99 € al mes.</p>
+			<form id="payment-form" novalidate>
+				<fieldset class="payment-methods"><legend>Elige una simulación</legend><label class="method-option"><input type="radio" name="method" value="bizum" checked><span><strong>Bizum</strong><small>No se enviará ninguna solicitud real</small></span></label><label class="method-option"><input type="radio" name="method" value="paypal"><span><strong>PayPal</strong><small>No se abrirá ni contactará con PayPal</small></span></label></fieldset>
+				<div id="bizum-fields"><label for="bizum-phone">Teléfono de Bizum</label><input id="bizum-phone" name="bizumPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="600 123 456"></div>
+			<div id="paypal-fields" hidden><label for="paypal-email">Correo de PayPal</label><input id="paypal-email" name="paypalEmail" type="email" autocomplete="email" placeholder="tu@correo.com"></div>
+				<p class="message" id="payment-message" role="alert"></p>
+				<button class="primary" id="pay-submit" type="submit">Pagar con Bizum</button>
+			</form>
+			<p class="payment-note">Modo demostración: no se realiza ningún cargo. El plan de prueba dura 30 días y puede cancelarse.</p>
+		</section>
+	</div>
+	<div class="payment-backdrop" id="compose-modal" hidden>
+		<section class="payment-modal compose-modal" role="dialog" aria-modal="true" aria-labelledby="compose-title">
+			<button class="modal-close" id="close-compose-button" type="button" aria-label="Cerrar redacción">×</button>
+			<p class="eyebrow">CorreoSeguro Plus</p>
+			<h2 id="compose-title">Nuevo mensaje</h2>
+			<p class="payment-subtitle">En la demo, solo puedes escribir a cuentas registradas y verificadas.</p>
+			<form id="compose-form" novalidate>
+				<label for="message-recipient">Para</label><input id="message-recipient" name="recipient" type="email" autocomplete="email" required maxlength="254" placeholder="persona@correo.com">
+				<label for="message-subject">Asunto</label><input id="message-subject" name="subject" type="text" required maxlength="160" placeholder="Asunto del mensaje">
+				<label for="message-body">Mensaje</label><textarea id="message-body" name="body" required maxlength="10000" rows="7" placeholder="Escribe tu mensaje"></textarea>
+				<p class="message" id="compose-message" role="alert"></p>
+				<button class="primary" id="send-message-button" type="submit">Enviar mensaje</button>
+			</form>
+			<p class="payment-note">Este mensaje se guarda dentro de CorreoSeguro; no se envía a direcciones externas.</p>
+		</section>
+	</div>
+
+	<script>
+		const toast = document.getElementById('toast');
+		const paymentModal = document.getElementById('payment-modal');
+		const composeModal = document.getElementById('compose-modal');
+		const planFeatureButtons = document.querySelectorAll('[data-plan-feature]');
+		const composeButton = document.getElementById('compose-button');
+		const mailView = document.getElementById('mail-view');
+		const mailListPanel = document.getElementById('mail-list-panel');
+		const mailDetail = document.getElementById('mail-detail');
+		let session = null;
+		let toastTimer;
+		let planActive = false;
+		let currentFolder = 'inbox';
+		let currentMessages = [];
+		let openMessageItem = null;
+
+		function setPlanActive(isActive) {
+			planActive = isActive;
+			planFeatureButtons.forEach((button) => {
+				button.disabled = !isActive;
+				button.title = isActive ? '' : 'Activa CorreoSeguro Plus para desbloquear';
+			});
+			composeButton.disabled = !isActive;
+			composeButton.title = isActive ? '' : 'Activa CorreoSeguro Plus para desbloquear';
+		}
+		const formatPlanDate = (timestamp) => new Intl.DateTimeFormat('es-ES', { dateStyle: 'long' }).format(new Date(timestamp));
+		const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+		const formatMessageDate = (value) => new Intl.DateTimeFormat('es-ES', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value.replace(' ', 'T') + 'Z'));
+		async function apiRequest(path, options = {}) {
+			const response = await fetch(path, options);
+			const result = await response.json();
+			if (!response.ok) throw new Error(result.error || 'No se pudo completar la operación.');
+			return result;
+		}
+		function setMainView(view) {
+			document.getElementById('home-stats').hidden = view !== 'home';
+			document.getElementById('home-billing').hidden = view !== 'home';
+			document.getElementById('home-dashboard').hidden = view !== 'home';
+			document.getElementById('flowchart-section').hidden = view !== 'home';
+			mailView.hidden = view !== 'mail';
+		}
+		function showHome() {
+			setMainView('home');
+			document.querySelectorAll('.side-nav button').forEach((button) => button.classList.toggle('active', button.dataset.view === 'Inicio'));
+		}
+		async function showMailFolder(folder, button) {
+			if (!planActive) return showToast('Necesitas un plan Plus activo para consultar el correo.');
+			currentFolder = folder;
+			document.querySelectorAll('.side-nav button').forEach((item) => item.classList.toggle('active', item === button));
+			document.getElementById('mail-view-title').textContent = button.dataset.view;
+			setMainView('mail');
+			mailListPanel.hidden = false;
+			mailDetail.hidden = true;
+			await loadMessages();
+		}
+		async function loadMessages() {
+			const list = document.getElementById('mail-list');
+			list.innerHTML = '<p class="mail-empty-note">Cargando mensajes…</p>';
+			document.getElementById('mail-empty').hidden = true;
+			try {
+				const { messages } = await apiRequest('/api/messages?folder=' + encodeURIComponent(currentFolder));
+				currentMessages = messages;
+				document.getElementById('mail-view-count').textContent = messages.length + (messages.length === 1 ? ' mensaje' : ' mensajes');
+				document.getElementById('mail-empty').hidden = messages.length > 0;
+				list.innerHTML = messages.map((message) => {
+					const correspondent = currentFolder === 'sent' ? 'Para: ' + message.recipient_email : 'De: ' + message.sender_email;
+					const action = currentFolder === 'archived' ? 'Restaurar' : 'Archivar';
+					const actionName = currentFolder === 'archived' ? 'restore' : 'archive';
+					return `<article class="message-row${message.is_read ? '' : ' unread'}"><button class="message-open" type="button" data-open-message="${message.id}"><span class="message-copy"><strong>${escapeHtml(message.subject)}</strong><span>${escapeHtml(correspondent)}</span><span class="message-preview">${escapeHtml(message.body.replace(/\s+/g, ' ').slice(0, 150))}</span></span><time>${escapeHtml(formatMessageDate(message.created_at))}</time></button><button class="message-action" type="button" data-message-action="${actionName}" data-message-id="${message.id}">${action}</button></article>`;
+				}).join('');
+			} catch (error) {
+				list.innerHTML = `<p class="mail-empty-note error-text">${escapeHtml(error.message)}</p>`;
+			}
+		}
+		async function openMessage(itemId) {
+			const message = currentMessages.find((item) => String(item.id) === String(itemId));
+			if (!message) return;
+			try {
+				if (!message.is_read && currentFolder !== 'sent') {
+					await apiRequest('/api/messages/' + message.id + '/read', { method: 'POST' });
+					message.is_read = 1;
+				}
+				openMessageItem = message;
+				document.getElementById('detail-subject').textContent = message.subject;
+				document.getElementById('detail-meta').textContent = 'De: ' + message.sender_email + ' · Para: ' + message.recipient_email + ' · ' + formatMessageDate(message.created_at);
+				document.getElementById('detail-body').textContent = message.body;
+				document.getElementById('mail-archive-button').hidden = currentFolder === 'archived';
+				document.getElementById('mail-restore-button').hidden = currentFolder !== 'archived';
+				mailListPanel.hidden = true;
+				mailDetail.hidden = false;
+			} catch (error) {
+				showToast(error.message);
+			}
+		}
+		async function updateMessageFolder(action, itemId) {
+			try {
+				await apiRequest('/api/messages/' + itemId + '/' + action, { method: 'POST' });
+				mailDetail.hidden = true;
+				mailListPanel.hidden = false;
+				await loadMessages();
+			} catch (error) {
+				showToast(error.message);
+			}
+		}
+
+		fetch('/api/me').then((response) => { if (!response.ok) throw new Error(); return response.json(); }).then(({ user }) => {
+			session = user;
+			const firstName = session.name.split(' ')[0];
+			document.getElementById('user-name').textContent = session.name;
+			document.getElementById('user-email').textContent = session.email;
+			document.getElementById('user-avatar').textContent = firstName.charAt(0).toUpperCase();
+			document.getElementById('welcome-title').textContent = 'Buenos días, ' + firstName;
+			return fetch('/api/plan').then(async (response) => { const result = await response.json(); if (!response.ok) throw new Error(result.error); return result; }).then(({ subscription }) => {
+				planActive = subscription?.status === 'active';
+				setPlanActive(planActive);
+				if (planActive) {
+					document.getElementById('payment-status').textContent = 'Plan de prueba activo hasta ' + formatPlanDate(subscription.current_period_end);
+					document.getElementById('payment-button').textContent = 'Cancelar plan';
+				} else {
+					document.getElementById('payment-status').textContent = subscription?.status === 'expired' ? 'El periodo de prueba ha terminado.' : subscription?.status === 'cancelled' ? 'Plan cancelado.' : 'Activa el plan para desbloquear las opciones de correo.';
+					if (!subscription) setTimeout(() => { paymentModal.hidden = false; document.getElementById('bizum-phone').focus(); }, 450);
+				}
+			});
+		}).catch(() => { window.location.href = 'index.html'; });
+
+		function showToast(message) {
+			toast.textContent = message;
+			toast.classList.add('visible');
+			clearTimeout(toastTimer);
+			toastTimer = setTimeout(() => toast.classList.remove('visible'), 2800);
+		}
+
+		document.querySelectorAll('.side-nav button').forEach((button) => button.addEventListener('click', () => {
+			if (button.dataset.folder) return showMailFolder(button.dataset.folder, button);
+			if (button.dataset.view === 'Inicio') return showHome();
+			if (button.id === 'flowchart-button') {
+				showHome();
+				document.getElementById('flowchart-section').scrollIntoView({ behavior: 'smooth' });
+			}
+		}));
+
+		function openCompose() {
+			if (!planActive) return showToast('Necesitas un plan Plus activo para escribir mensajes.');
+			composeModal.hidden = false;
+			document.getElementById('message-recipient').focus();
+		}
+		composeButton.addEventListener('click', openCompose);
+		document.getElementById('mail-compose-button').addEventListener('click', openCompose);
+		document.getElementById('close-compose-button').addEventListener('click', () => { composeModal.hidden = true; });
+		composeModal.addEventListener('click', (event) => { if (event.target === composeModal) composeModal.hidden = true; });
+		document.getElementById('mail-list').addEventListener('click', (event) => {
+			const openButton = event.target.closest('[data-open-message]');
+			if (openButton) return openMessage(openButton.dataset.openMessage);
+			const actionButton = event.target.closest('[data-message-action]');
+			if (actionButton) updateMessageFolder(actionButton.dataset.messageAction, actionButton.dataset.messageId);
+		});
+		document.getElementById('back-to-mail-list').addEventListener('click', () => { mailDetail.hidden = true; mailListPanel.hidden = false; loadMessages(); });
+		document.getElementById('mail-archive-button').addEventListener('click', () => { if (openMessageItem) updateMessageFolder('archive', openMessageItem.id); });
+		document.getElementById('mail-restore-button').addEventListener('click', () => { if (openMessageItem) updateMessageFolder('restore', openMessageItem.id); });
+		document.getElementById('compose-form').addEventListener('submit', async (event) => {
+			event.preventDefault();
+			const formElement = event.currentTarget;
+			const form = new FormData(formElement);
+			const sendButton = document.getElementById('send-message-button');
+			const recipient = String(form.get('recipient') || '').trim().toLowerCase();
+			const subject = String(form.get('subject') || '').trim();
+			const body = String(form.get('body') || '').trim();
+			if (!recipient.includes('@') || !subject || !body) return showComposeMessage('Completa destinatario, asunto y mensaje.', true);
+			sendButton.disabled = true;
+			try {
+				await apiRequest('/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ recipient, subject, body }) });
+				composeModal.hidden = true;
+				formElement.reset();
+				showToast('Mensaje guardado en Enviados y entregado en la cuenta destinataria.');
+				if (currentFolder === 'sent' && !mailView.hidden) await loadMessages();
+			} catch (error) {
+				showComposeMessage(error.message, true);
+			} finally {
+				sendButton.disabled = false;
+			}
+		});
+		document.getElementById('notification-button').addEventListener('click', () => showToast('No tienes notificaciones nuevas.'));
+		document.getElementById('payment-button').addEventListener('click', async () => {
+			if (!planActive) {
+				paymentModal.hidden = false;
+				document.getElementById('bizum-phone').focus();
+				return;
+			}
+			if (!window.confirm('¿Cancelar el plan Plus de prueba? Las opciones premium se bloquearán inmediatamente.')) return;
+			try {
+				const response = await fetch('/api/plan/cancel', { method: 'POST' });
+				const result = await response.json();
+				if (!response.ok) throw new Error(result.error);
+				setPlanActive(false);
+				document.getElementById('payment-status').textContent = 'Plan cancelado.';
+				document.getElementById('payment-button').textContent = 'Activar plan';
+				showToast('Plan cancelado. Las opciones premium están bloqueadas.');
+			} catch (error) {
+				showToast(error.message);
+			}
+		});
+		document.getElementById('close-payment-button').addEventListener('click', () => { paymentModal.hidden = true; });
+		paymentModal.addEventListener('click', (event) => { if (event.target === paymentModal) paymentModal.hidden = true; });
+		document.querySelectorAll('input[name="method"]').forEach((input) => input.addEventListener('change', () => {
+			const isBizum = input.value === 'bizum' && input.checked;
+			document.getElementById('bizum-fields').hidden = !isBizum;
+			document.getElementById('paypal-fields').hidden = isBizum;
+			document.getElementById('pay-submit').textContent = isBizum ? 'Simular pago con Bizum' : 'Simular pago con PayPal';
+		}));
+		document.getElementById('payment-form').addEventListener('submit', async (event) => {
+			event.preventDefault();
+			const paymentForm = event.currentTarget;
+			const submitButton = document.getElementById('pay-submit');
+			const form = new FormData(paymentForm);
+			const method = form.get('method');
+			const value = method === 'bizum' ? String(form.get('bizumPhone') || '').replace(/\s/g, '') : String(form.get('paypalEmail') || '').trim();
+			if ((method === 'bizum' && !/^\+?\d{9,15}$/.test(value)) || (method === 'paypal' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))) return showPaymentMessage(method === 'bizum' ? 'Escribe un teléfono de Bizum válido.' : 'Escribe un correo de PayPal válido.', true);
+			submitButton.disabled = true;
+			try {
+				const response = await fetch('/api/payments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ method, value }) });
+				const result = await response.json();
+				if (!response.ok) throw new Error(result.error);
+				setPlanActive(true);
+				document.getElementById('payment-status').textContent = 'Plan de prueba activo hasta ' + formatPlanDate(result.subscription.current_period_end);
+				document.getElementById('payment-button').textContent = 'Cancelar plan';
+				showPaymentMessage('Plan de prueba activado hasta ' + formatPlanDate(result.subscription.current_period_end) + '.');
+				setTimeout(() => {
+					paymentModal.hidden = true;
+					paymentForm.reset();
+					document.getElementById('bizum-fields').hidden = false;
+					document.getElementById('paypal-fields').hidden = true;
+					submitButton.textContent = 'Simular pago con Bizum';
+				}, 900);
+			} catch (error) {
+				showPaymentMessage(error.message, true);
+			} finally {
+				submitButton.disabled = false;
+			}
+		});
+		function showPaymentMessage(message, error = false) {
+			const element = document.getElementById('payment-message');
+			element.textContent = message;
+			element.classList.toggle('error', error);
+		}
+		function showComposeMessage(message, error = false) {
+			const element = document.getElementById('compose-message');
+			element.textContent = message;
+			element.classList.toggle('error', error);
+		}
+		document.getElementById('logout-button').addEventListener('click', () => {
+			fetch('/api/logout', { method: 'POST' }).finally(() => { window.location.href = 'index.html'; });
+		});
+	</script>
+</body>
+</html>

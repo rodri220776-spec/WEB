@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<htmhttp://localhost:3000l lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CoorreoSeguro | Control de acceso</title>
+	<link rel="stylesheet" href="1.css">
+</head>
+<body>
+	<main class="shell">
+		<section class="access-card" aria-label="Control de acceso">
+			<aside class="intro">
+				<div class="brand"><span class="brand-mark">✦</span> CoorreoSeguro</div>
+				<div class="intro-copy">
+					<p class="eyebrow">Tu espacio, protegido</p>
+					<h1>Entra con tranquilidad.</h1>
+					<p>Un acceso sencillo para mantener tus conversaciones y tu información justo donde deben estar.</p>
+				</div>
+				<div class="secure-note"><span>✓</span> Conexión privada y protegida</div>
+			</aside>
+
+			<section class="form-side">
+				<div class="form-heading">
+					<h2 id="form-title">Bienvenido de nuevo</h2>
+					<p id="form-subtitle">Accede a tu cuenta para continuar.</p>
+				</div>
+				<nav class="tabs" aria-label="Tipo de acceso">
+					<button class="tab active" type="button" data-tab="login">Iniciar sesión</button>
+					<button class="tab" type="button" data-tab="register">Crear cuenta</button>
+				</nav>
+
+				<div id="login-panel" class="form-panel">
+					<form id="login-form" novalidate>
+						<div class="field"><label for="login-email">Correo electrónico</label><input id="login-email" name="email" type="email" autocomplete="email" placeholder="tu@correo.com" required></div>
+						<div class="field"><label for="login-password">Contraseña</label><div class="password-wrap"><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required><button class="toggle-password" type="button" aria-label="Mostrar contraseña">◉</button></div></div>
+						<div class="form-row"><label class="check"><input type="checkbox" name="remember"> Recordarme</label><button class="link" id="forgot-button" type="button">¿Olvidaste tu contraseña?</button></div>
+						<p class="message" id="login-message" role="alert"></p>
+						<button class="primary" type="submit">Entrar a mi cuenta</button>
+					</form>
+					<p class="fine-print">Al continuar aceptas nuestros <a href="#">términos de uso</a> y <a href="#">política de privacidad</a>.</p>
+				</div>
+
+				<div id="register-panel" class="form-panel" hidden>
+					<form id="register-form" novalidate>
+						<div class="field"><label for="register-name">Nombre completo</label><input id="register-name" name="name" type="text" autocomplete="name" placeholder="Tu nombre" required></div>
+						<div class="field"><label for="register-email">Correo electrónico</label><input id="register-email" name="email" type="email" autocomplete="email" placeholder="tu@correo.com" required></div>
+						<div class="field"><label for="register-password">Crea una contraseña</label><div class="password-wrap"><input id="register-password" name="password" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres" required minlength="8"><button class="toggle-password" type="button" aria-label="Mostrar contraseña">◉</button></div></div>
+						<p class="message" id="register-message" role="alert"></p>
+						<button class="primary" type="submit">Crear mi cuenta</button>
+					</form>
+					<p class="fine-print">Te enviaremos un código de confirmación a tu correo.</p>
+				</div>
+
+				<div id="verification-panel" class="form-panel verification" hidden>
+					<div class="mail-icon">✉</div>
+					<h3>Confirma tu correo</h3>
+					<p>Hemos enviado un código de 6 dígitos a<br><span class="email-badge" id="verification-email"></span></p>
+					<form id="verification-form" novalidate>
+						<label for="verification-code">Código de confirmación</label>
+						<input class="code-input" id="verification-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000" required>
+						<p class="message" id="verification-message" role="alert"></p>
+						<button class="primary" type="submit">Confirmar correo</button>
+					</form>
+					<button class="secondary" id="resend-button" type="button">Reenviar código</button>
+				</div>
+			</section>
+		</section>
+	</main>
+
+	<script>
+		const api = (path, options = {}) => fetch('/api' + path, { headers: { 'Content-Type': 'application/json' }, ...options }).then(async (response) => { const data = await response.json(); if (!response.ok) throw new Error(data.error || 'No se pudo completar la operación.'); return data; });
+		const byId = (id) => document.getElementById(id);
+		let verificationCode = '';
+		let pendingEmail = '';
+
+		function showMessage(id, text, error = false) {
+			const element = byId(id);
+			element.textContent = text;
+			element.classList.toggle('error', error);
+		}
+
+		function switchTab(tab) {
+			document.querySelectorAll('.tab').forEach((button) => button.classList.toggle('active', button.dataset.tab === tab));
+			byId('login-panel').hidden = tab !== 'login';
+			byId('register-panel').hidden = tab !== 'register';
+			byId('verification-panel').hidden = true;
+			byId('form-title').textContent = tab === 'login' ? 'Bienvenido de nuevo' : 'Crea tu espacio';
+			byId('form-subtitle').textContent = tab === 'login' ? 'Accede a tu cuenta para continuar.' : 'Regístrate en menos de un minuto.';
+		}
+
+		function openVerification(email, code = '') {
+			pendingEmail = email;
+			verificationCode = code;
+			byId('verification-email').textContent = email;
+			byId('login-panel').hidden = true;
+			byId('register-panel').hidden = true;
+			byId('verification-panel').hidden = false;
+			document.querySelectorAll('.tab').forEach((button) => button.classList.remove('active'));
+			byId('form-title').textContent = 'Un último paso';
+			byId('form-subtitle').textContent = 'Verifica tu dirección para activar tu cuenta.';
+			showMessage('verification-message', verificationCode ? 'Código de prueba: ' + verificationCode : 'Revisa tu correo para obtener el código.');
+		}
+
+		document.querySelectorAll('.tab').forEach((button) => button.addEventListener('click', () => switchTab(button.dataset.tab)));
+		document.querySelectorAll('.toggle-password').forEach((button) => button.addEventListener('click', () => {
+			const input = button.parentElement.querySelector('input');
+			input.type = input.type === 'password' ? 'text' : 'password';
+			button.setAttribute('aria-label', input.type === 'password' ? 'Mostrar contraseña' : 'Ocultar contraseña');
+		}));
+
+		byId('register-form').addEventListener('submit', async (event) => {
+			event.preventDefault();
+			const form = new FormData(event.currentTarget);
+			const name = form.get('name').trim(); 
+			const email = form.get('email').trim().toLowerCase();
+			const password = form.get('password');
+			if (!name || !email || !email.includes('@')) return showMessage('register-message', 'Completa los datos con un correo válido.', true);
+			if (password.length < 8) return showMessage('register-message', 'La contraseña debe tener al menos 8 caracteres.', true);
+			try { const result = await api('/register', { method: 'POST', body: JSON.stringify({ name, email, password }) }); openVerification(email, result.demoCode); } catch (error) { showMessage('register-message', error.message, true); }
+		});
+
+		byId('verification-form').addEventListener('submit', async (event) => {
+			event.preventDefault();
+			const code = byId('verification-code').value.trim();
+			try { await api('/verify', { method: 'POST', body: JSON.stringify({ email: pendingEmail, code }) }); showMessage('verification-message', 'Correo confirmado. Ya puedes iniciar sesión.'); setTimeout(() => { switchTab('login'); byId('login-email').value = pendingEmail; }, 900); } catch (error) { showMessage('verification-message', error.message, true); }
+		});
+
+		byId('resend-button').addEventListener('click', async () => {
+			try { const result = await api('/resend-code', { method: 'POST', body: JSON.stringify({ email: pendingEmail }) }); verificationCode = result.demoCode || ''; showMessage('verification-message', verificationCode ? 'Nuevo código de prueba: ' + verificationCode : 'Código reenviado.'); } catch (error) { showMessage('verification-message', error.message, true); }
+		});
+
+		byId('login-form').addEventListener('submit', async (event) => {
+			event.preventDefault();
+			const form = new FormData(event.currentTarget);
+			const email = form.get('email').trim().toLowerCase();
+			try { const result = await api('/login', { method: 'POST', body: JSON.stringify({ email, password: form.get('password') }) }); showMessage('login-message', 'Sesión iniciada. Hola, ' + result.user.name + '.'); setTimeout(() => { window.location.href = '2.html'; }, 500); } catch (error) { showMessage('login-message', error.message, true); }
+		});
+
+		byId('forgot-button').addEventListener('click', () => {
+			const email = byId('login-email').value.trim();
+			showMessage('login-message', email && email.includes('@') ? 'Si existe una cuenta con ese correo, recibirás instrucciones.' : 'Escribe primero tu correo electrónico.', !email || !email.includes('@'));
+		});
+	</script>
+</body>
+</html>

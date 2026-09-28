@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: correoseguro-tienda
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 22.14.0
+      - key: NODE_ENV
+        value: production
+      - key: DEMO_MODE
+        value: "true"

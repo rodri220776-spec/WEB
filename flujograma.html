@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CorreoSeguro | Flujograma</title>
+	<link rel="stylesheet" href="flujograma.css">
+</head>
+<body>
+	<main class="flow-page">
+		<header class="page-header">
+			<a class="back-link" href="1.html">← Volver al acceso</a>
+			<div class="brand"><span class="brand-mark">✦</span> CorreoSeguro</div>
+			<p class="eyebrow">Documentación del sistema</p>
+			<h1>Flujo de control de acceso</h1>
+			<p class="intro">Recorrido que sigue una persona desde que entra al sistema hasta que accede a su página principal.</p>
+		</header>
+
+		<section class="flowchart" aria-label="Flujograma del control de acceso">
+			<article class="flow-node start">
+				<span class="node-number">01</span>
+				<span class="node-icon">◉</span>
+				<h2>Inicio</h2>
+				<p>La persona abre <strong>1.html</strong>.</p>
+			</article>
+			<div class="connector"><span>↓</span><small>continuar</small></div>
+
+			<article class="flow-node action">
+				<span class="node-number">02</span>
+				<span class="node-icon">↪</span>
+				<h2>Elegir una opción</h2>
+				<div class="choice-list"><span>Iniciar sesión</span><span>Crear cuenta</span></div>
+			</article>
+			<div class="connector"><span>↓</span><small>si crea una cuenta</small></div>
+
+			<article class="flow-node action">
+				<span class="node-number">03</span>
+				<span class="node-icon">✎</span>
+				<h2>Completar registro</h2>
+				<p>Nombre, correo electrónico y contraseña de mínimo 8 caracteres.</p>
+			</article>
+			<div class="connector"><span>↓</span><small>datos correctos</small></div>
+
+			<article class="flow-node decision">
+				<span class="node-number">04</span>
+				<span class="node-icon">?</span>
+				<h2>¿Datos válidos?</h2>
+				<div class="branches"><span class="no">No: mostrar error</span><span class="yes">Sí: guardar cuenta</span></div>
+			</article>
+			<div class="connector"><span>↓</span><small>sí</small></div>
+
+			<article class="flow-node action">
+				<span class="node-number">05</span>
+				<span class="node-icon">✉</span>
+				<h2>Confirmar correo</h2>
+				<p>Se genera un código de 6 dígitos para verificar la dirección.</p>
+			</article>
+			<div class="connector"><span>↓</span><small>código enviado</small></div>
+
+			<article class="flow-node decision">
+				<span class="node-number">06</span>
+				<span class="node-icon">?</span>
+				<h2>¿Código correcto?</h2>
+				<div class="branches"><span class="no">No: reenviar código</span><span class="yes">Sí: activar cuenta</span></div>
+			</article>
+			<div class="connector"><span>↓</span><small>cuenta activa</small></div>
+
+			<article class="flow-node action login-step">
+				<span class="node-number">07</span>
+				<span class="node-icon">🔒</span>
+				<h2>Iniciar sesión</h2>
+				<p>Se comprueban el correo y la contraseña guardados localmente.</p>
+			</article>
+			<div class="connector"><span>↓</span><small>credenciales correctas</small></div>
+
+			<article class="flow-node finish">
+				<span class="node-number">08</span>
+				<span class="node-icon">✓</span>
+				<h2>Acceso concedido</h2>
+				<p>Se crea la sesión y se abre <strong>2.html</strong>, la página principal.</p>
+				<a href="2.html">Ver página principal →</a>
+			</article>
+		</section>
+
+		<footer class="legend">
+			<span><i class="legend-dot green"></i>Acción</span>
+			<span><i class="legend-dot yellow"></i>Decisión</span>
+			<span><i class="legend-dot dark"></i>Inicio / final</span>
+		</footer>
+	</main>
+</body>
+</html>
